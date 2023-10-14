@@ -32,19 +32,19 @@ const Home = () => {
     }
   };
 
-  const getNoti = async (ItemId) => {
+  const getNoti = async () => {
     try {
       const response = await api.get("/waiter/order_notification");
       const notifications = response.data;
       setNoti(notifications);
-
+  
       notifications.forEach((notification) => {
         toast.info(
           `${notification.quantity} ${notification.product_name} at Table ${notification.table_no.table_no} is ready`,
           {
             autoClose: false,
             onClose: () => {
-              api.put(`/waiter/order_viewed/${ItemId}`);
+              api.put(`/waiter/order_viewed/${notification.id}`);
             },
           }
         );
@@ -53,6 +53,7 @@ const Home = () => {
       console.error("Error fetching notifications: ", error);
     }
   };
+  
 
   let getProduct = async () => {
     let response = await api.get("/store/product");
